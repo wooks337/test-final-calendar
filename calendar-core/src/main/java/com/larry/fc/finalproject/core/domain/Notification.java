@@ -1,6 +1,5 @@
 package com.larry.fc.finalproject.core.domain;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,5 +13,5 @@ public class Notification {
 	private String title;
 	private String description;
 	private User writer;
-	private LocalDate createdAt;
+	private LocalDateTime createdAt;
 }
