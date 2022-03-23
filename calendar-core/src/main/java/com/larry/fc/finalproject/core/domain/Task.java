@@ -1,13 +1,17 @@
 package com.larry.fc.finalproject.core.domain;
 
-import java.time.LocalDateTime;
+import com.larry.fc.finalproject.core.domain.entity.Schedule;
+import com.larry.fc.finalproject.core.domain.entity.User;
 
 public class Task {
 
-	private Long id;
-	private LocalDateTime taskAt;
-	private String title;
-	private String description;
-	private User writer;
-	private LocalDateTime createdAt;
+    private Schedule schedule;
+
+    public Task (Schedule schedule) {
+        this.schedule = schedule;
+    }
+
+    public User getWriter() {
+        return this.schedule.getWriter();
+    }
 }

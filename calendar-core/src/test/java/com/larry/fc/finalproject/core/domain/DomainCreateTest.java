@@ -1,28 +1,42 @@
 package com.larry.fc.finalproject.core.domain;
 
-import java.time.LocalDateTime;
-import org.junit.jupiter.api.DisplayName;
+import com.larry.fc.finalproject.core.domain.entity.Schedule;
+import com.larry.fc.finalproject.core.domain.entity.User;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DomainCreateTest {
 
-	@Test
-	@DisplayName("이벤트 생성")
-	void createEvent() {
-		final User user1 = new User(1L, "user1", "test@email", "password", LocalDateTime.now().toLocalDate(), // 날짜 형식으로 변환
-				LocalDateTime.now());
+    private LocalDateTime now = LocalDateTime.now();
+    private User user1 = new User(1L,
+                                  "user1",
+                                  "email@email",
+                                  "password",
+                                  LocalDateTime.now()
+                                               .toLocalDate());
 
-		final User user2 = new User(2L, "user2", "test2@email", "password", LocalDateTime.now().toLocalDate(), // 날짜 형식으로 변환
-				LocalDateTime.now());
 
-		final Event event = new Event(1L, LocalDateTime.now(), LocalDateTime.now(), "급만남", "내용무", user1, null,
-				LocalDateTime.now());
+    @Test
+    void createDomainFromSchedule() {
+        final Schedule taskSchedule = Schedule.task("title", "desc", now, user1);
+        final Task task = taskSchedule.toTask();
+        assertEquals("user1",
+                     task.getWriter()
+                         .getName());
 
-		final Engagement engagement = new Engagement(1L, event, user2, RequestStatus.REQUESTED, LocalDateTime.now());
-		event.addEngagement(engagement);
+        final Schedule notiSchedule = Schedule.notification("title", now, user1);
+        final Notification notification = notiSchedule.toNotification();
+        assertEquals("user1",
+                     notification.getWriter()
+                                 .getName());
 
-		assertEquals("user1", event.getEngagements().get(0).getEvent().getWriter().getName());
-	}
+        final Schedule eventSchedule = Schedule.event("title", "desc", now, now, user1);
+        final Event event = eventSchedule.toEvent();
+        assertEquals("user1",
+                     event.getWriter()
+                          .getName());
+    }
 }
