@@ -3,6 +3,7 @@ package com.larry.fc.finalproject.core.service;
 import com.larry.fc.finalproject.core.domain.entity.User;
 import com.larry.fc.finalproject.core.domain.entity.repository.UserRepository;
 import com.larry.fc.finalproject.core.dto.UserCreateReq;
+import com.larry.fc.finalproject.core.util.Encryptor;
 import java.util.Optional;
 import javax.transaction.Transactional;
 import lombok.Builder;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService {
 
+	private final Encryptor bcryptEncryptor;
 	private final UserRepository userRepository;
 
 	public User create(UserCreateReq req) {
@@ -24,7 +26,7 @@ public class UserService {
 
 		return userRepository.save(User.builder()
 				.name(req.getName())
-				.password(req.getPassword())
+				.password(bcryptEncryptor.encrypt(req.getPassword())) // pwd encrypt
 				.email(req.getEmail())
 				.birthday(req.getBirthday())
 				.build());
@@ -32,8 +34,8 @@ public class UserService {
 
 	@Transactional
 	public Optional<User> findPwMatchUser(String email, String password) {
-			return userRepository.findByEmail(email)
-					.map(user -> user.getPassword().equals(password) ? user : null);
+		return userRepository.findByEmail(email)
+				.map(u -> u.isMatched(bcryptEncryptor, password) ? u : null);
 	}
 
 }
