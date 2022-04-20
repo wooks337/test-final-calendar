@@ -38,4 +38,8 @@ public class UserService {
 				.map(u -> u.isMatched(bcryptEncryptor, password) ? u : null);
 	}
 
+	public User getOrThrowById(Long id) {
+		return userRepository.findById(id).orElseThrow(() -> new RuntimeException("no user."));
+	}
+
 }
