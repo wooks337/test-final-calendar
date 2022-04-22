@@ -3,7 +3,9 @@ package com.larry.fc.finalproject.api.controller.api;
 import static com.larry.fc.finalproject.api.service.LoginService.LOGIN_SESSION_KEY;
 
 import com.larry.fc.finalproject.api.dto.AuthUser;
+import com.larry.fc.finalproject.api.dto.EventCreateReq;
 import com.larry.fc.finalproject.api.dto.TaskCreateReq;
+import com.larry.fc.finalproject.api.service.EventService;
 import com.larry.fc.finalproject.api.service.TaskService;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -19,14 +21,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class ScheduleController {
 
 	private final TaskService taskService;
+    private final EventService eventService;
 
-	@PostMapping("/tasks")
-	public ResponseEntity<Void> createTask(@RequestBody TaskCreateReq taskCreateReq, HttpSession session) {
-		final Long userId = (Long) session.getAttribute(LOGIN_SESSION_KEY);
-		if (userId == null) {
-			throw new RuntimeException("bad request. no session.");
-		}
-		taskService.create(taskCreateReq, AuthUser.of(userId));
-		return ResponseEntity.ok().build();  // 200 ok 에 body 없음
-	}
+    @PostMapping("/tasks")
+    public ResponseEntity<Void> createTask(@RequestBody TaskCreateReq taskCreateReq,
+                                           AuthUser authUser) {
+        taskService.create(taskCreateReq, authUser);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/event")
+    public ResponseEntity<Void> createTask(@RequestBody EventCreateReq eventCreateReq,
+                                           AuthUser authUser) {
+        eventService.create(eventCreateReq, authUser);
+        return ResponseEntity.ok().build();
+    }
 }
