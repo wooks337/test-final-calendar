@@ -4,8 +4,10 @@ import static com.larry.fc.finalproject.api.service.LoginService.LOGIN_SESSION_K
 
 import com.larry.fc.finalproject.api.dto.AuthUser;
 import com.larry.fc.finalproject.api.dto.EventCreateReq;
+import com.larry.fc.finalproject.api.dto.NotificationCreateReq;
 import com.larry.fc.finalproject.api.dto.TaskCreateReq;
 import com.larry.fc.finalproject.api.service.EventService;
+import com.larry.fc.finalproject.api.service.NotificationService;
 import com.larry.fc.finalproject.api.service.TaskService;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -21,19 +23,27 @@ import org.springframework.web.bind.annotation.RestController;
 public class ScheduleController {
 
 	private final TaskService taskService;
-    private final EventService eventService;
+	private final EventService eventService;
+	private final NotificationService notificationService;
 
-    @PostMapping("/tasks")
-    public ResponseEntity<Void> createTask(@RequestBody TaskCreateReq taskCreateReq,
-                                           AuthUser authUser) {
-        taskService.create(taskCreateReq, authUser);
-        return ResponseEntity.ok().build();
-    }
+	@PostMapping("/tasks")
+	public ResponseEntity<Void> createTask(@RequestBody TaskCreateReq taskCreateReq,
+			AuthUser authUser) {
+		taskService.create(taskCreateReq, authUser);
+		return ResponseEntity.ok().build();
+	}
 
-    @PostMapping("/event")
-    public ResponseEntity<Void> createTask(@RequestBody EventCreateReq eventCreateReq,
-                                           AuthUser authUser) {
-        eventService.create(eventCreateReq, authUser);
-        return ResponseEntity.ok().build();
-    }
+	@PostMapping("/event")
+	public ResponseEntity<Void> createTask(@RequestBody EventCreateReq eventCreateReq,
+			AuthUser authUser) {
+		eventService.create(eventCreateReq, authUser);
+		return ResponseEntity.ok().build();
+	}
+
+	@PostMapping("/notifications")
+	public ResponseEntity<Void> createTask(
+			@RequestBody NotificationCreateReq notificationCreateReq, AuthUser authUser) {
+		notificationService.create(notificationCreateReq, authUser);
+		return ResponseEntity.ok().build();
+	}
 }
